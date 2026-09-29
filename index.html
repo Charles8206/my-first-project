@@ -81,7 +81,7 @@
 <script>
         let allNews = [];
 
-        // ?t= 뒤에 현재 시간을 붙여 브라우저 캐시(과거 기록)를 무시하고 항상 최신 데이터를 불러옵니다.
+        // 최신 데이터 강제 불러오기 (캐시 무시)
         const timestamp = new Date().getTime();
         fetch('./news.json?t=' + timestamp)
             .then(response => {
@@ -89,20 +89,19 @@
                 return response.json();
             })
             .then(data => {
-                // 데이터 배열을 안전하게 추출
                 allNews = Array.isArray(data) ? data : (data.news || data.items || []);
-                document.getElementById('update-time').innerText = `업데이트 완료 | 총 ${allNews.length}건 수집됨`;
+                document.getElementById('update-time').innerText = `새로고침 완료 | 총 ${allNews.length}건 수집됨`;
                 renderNews(allNews);
             })
             .catch(err => {
-                console.error('불러오기 오류:', err);
-                document.getElementById('update-time').innerText = '뉴스 데이터를 불러오는데 실패했습니다. (Ctrl+Shift+R을 눌러 새로고침 해주세요)';
+                console.error(err);
+                document.getElementById('update-time').innerText = '데이터를 불러오는데 실패했습니다.';
             });
 
         // 실시간 검색 기능
         document.getElementById('search-input').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase();
-            const filtered = allNews.filter(news => news.title.toLowerCase().includes(keyword));
+            const filtered = allNews.filter(news => (news.title || '').toLowerCase().includes(keyword));
             renderNews(filtered);
         });
 
@@ -115,34 +114,65 @@
             };
             let counts = { univ: 0, edu: 0, fin: 0 };
 
-            // 기존 리스트 초기화
+            // 초기화
             lists.univ.innerHTML = ''; lists.edu.innerHTML = ''; lists.fin.innerHTML = '';
 
             if (!newsArray || newsArray.length === 0) return;
 
             newsArray.forEach(news => {
-                // 텍스트 안전 처리 (오류 방지)
-                const title = news.title || '제목 없음';
-                const link = news.link || '#';
-                const dateText = news.date || news.published || '';
-                const sourceText = news.source || '출처 모름';
-                const category = String(news.category || '').trim();
+                // 1. 타이틀과 출처 자동 분리 (제목 끝에 ' - 언론사' 형태로 붙어있는 경우 처리)
+                let rawTitle = news.title || '제목 없음';
+                let title = rawTitle;
+                let sourceText = news.source || news.publisher || '';
+                
+                if (!sourceText && rawTitle.includes(' - ')) {
+                    const parts = rawTitle.split(' - ');
+                    sourceText = parts.pop(); // 마지막 텍스트를 언론사로 추출
+                    title = parts.join(' - '); // 나머지를 진짜 제목으로
+                } else if (!sourceText) {
+                    sourceText = '출처 모름';
+                }
+
+                // 2. 카테고리 유연한 분류 (json 필드 확인 및 제목 기반 추론)
+                const jsonCategory = String(news.category || news.keyword || news.query || '').trim();
+                let categoryType = 'fin'; // 기본값 설정
+                
+                if (jsonCategory.includes('대학') || jsonCategory.includes('대학교')) {
+                    categoryType = 'univ';
+                } else if (jsonCategory.includes('교육')) {
+                    categoryType = 'edu';
+                } else if (jsonCategory.includes('기재부') || jsonCategory.includes('재경부') || jsonCategory.includes('기획')) {
+                    categoryType = 'fin';
+                } else {
+                    // 카테고리 정보가 없을 경우 제목 텍스트로 강제 분류
+                    if (rawTitle.includes('교육부') || rawTitle.includes('장관') || rawTitle.includes('교과')) {
+                        categoryType = 'edu';
+                    } else if (rawTitle.includes('대학') || rawTitle.includes('캠퍼스') || rawTitle.includes('교수')) {
+                        categoryType = 'univ';
+                    } else {
+                        categoryType = 'fin';
+                    }
+                }
+
+                // 3. 날짜 텍스트 깔끔하게 정리
+                let dateText = news.date || news.published || news.pubDate || '';
+                dateText = dateText.replace(' GMT', '').replace('T', ' ').substring(0, 16);
 
                 const itemHtml = `
                     <div class="news-item">
-                        <a href="${link}" target="_blank" class="news-link">${title}</a>
+                        <a href="${news.link || '#'}" target="_blank" class="news-link">${title}</a>
                         <div class="news-meta">
-                            <span>${dateText.substring(0, 16).replace('T', ' ')}</span>
+                            <span>${dateText}</span>
                             <span class="news-source">${sourceText}</span>
                         </div>
                     </div>
                 `;
 
-                // 카테고리별 유연한 분류
-                if (category.includes('대학') || category.includes('대학교')) {
+                // 4. 화면 및 카운트 반영
+                if (categoryType === 'univ') {
                     lists.univ.innerHTML += itemHtml;
                     counts.univ++;
-                } else if (category.includes('교육부') || category.includes('교육')) {
+                } else if (categoryType === 'edu') {
                     lists.edu.innerHTML += itemHtml;
                     counts.edu++;
                 } else {
@@ -151,7 +181,7 @@
                 }
             });
 
-            // 건수 숫자 갱신
+            // 건수 업데이트
             document.getElementById('count-univ').innerText = counts.univ + '건';
             document.getElementById('count-edu').innerText = counts.edu + '건';
             document.getElementById('count-fin').innerText = counts.fin + '건';
