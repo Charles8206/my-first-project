@@ -5,7 +5,7 @@
     "source": "경기도뉴스포털",
     "date": "Tue, 29 Sep 2026 06:24:07 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "\"대학 AI교육 혁신\"...'AI중심대학·AX대학원' 공동 출범식",
@@ -13,15 +13,15 @@
     "source": "지디넷코리아",
     "date": "Tue, 29 Sep 2026 06:00:01 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "2026년 국립군산대학교 대학회계 전문계약직(성과분석평가연구원) 채용 재공고",
     "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE81MFoyM0sydFh0RVZrR1ZqeVMwRE1qcUduak9RMnI0NGxhQ2N3Q0JWY3ZHRXREX082XzBoQk9zOUdPTURvamJNZUNzVHhtRkt1dXE5cUYtX3JKRVNiTTF6NlFn?oc=5",
-    "source": "서울Pn",
+    "source": "go.seoul.co.kr",
     "date": "Tue, 29 Sep 2026 02:11:18 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "경복대학교, 다음 달 7일 ‘경기 북부 AID 거점센터’ 개소식 개최",
@@ -29,7 +29,7 @@
     "source": "인천일보",
     "date": "Tue, 29 Sep 2026 02:35:00 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "US뉴스, 2027년 대학 순위 발표… MIT·윌리엄스, 각 부문 1위",
@@ -37,7 +37,7 @@
     "source": "미주한국일보",
     "date": "Mon, 28 Sep 2026 03:50:39 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "강원대학교, 영국서 AI·디지털 대학혁신 협력 확대 논의",
@@ -45,15 +45,15 @@
     "source": "뉴스1",
     "date": "Mon, 28 Sep 2026 05:41:20 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "대학이 지역 성장 `앵커`로… 대구과학대, 산업·인재·정주 잇는다",
     "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE4yaUwzck41RGxSMmZWbzNzQy1QSWhlQmhqNWhnYm1qQjhsa2U1WEFDbHZ1a3llTnBRSTdwcHNlc3FJTFIwSUZyaTh0SFNNVThZU0VYajFsZExteW5wWmt6cEF3?oc=5",
-    "source": "매일신문",
+    "source": "imaeil.com",
     "date": "Mon, 28 Sep 2026 23:46:12 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "충북대-교통대 ‘동상이몽’…상처로 끝난 국립대 통합",
@@ -61,7 +61,7 @@
     "source": "cctoday.co.kr",
     "date": "Sun, 27 Sep 2026 06:16:21 GMT",
     "category": "대학",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "유웨이 특별조사 결과 발표 불투명… 교육부 “추가 연장 검토”",
@@ -69,7 +69,15 @@
     "source": "한국대학신문",
     "date": "Mon, 28 Sep 2026 06:29:35 GMT",
     "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  },
+  {
+    "title": "[단독] 41조 연수, 감사원이 감사한다",
+    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5ITUtvUnJsZDRsbFZnMUY2Z3IzWjNwVXRzZVE0Y0NsTHg4UllseVBqSjNHU0szSE80aEZZY0JNaWNHQm5BTjlqbURfdUtmQzhyWlVtN3NoVnFweEoxeDJZUm1xWWxIWUU?oc=5",
+    "source": "교육플러스",
+    "date": "Tue, 29 Sep 2026 03:54:39 GMT",
+    "category": "교육부",
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "학계 \"교육부 산하 한국학·고전번역·역사재단 통합 철회\"",
@@ -77,15 +85,7 @@
     "source": "뉴시스",
     "date": "Mon, 28 Sep 2026 08:40:18 GMT",
     "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
-  },
-  {
-    "title": "2026 국회 교육위 국정감사, 다음달 7일부터 시작… 교육부·대학 등 67개 기관 대상",
-    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1VcFBweEdBaURLM3JlOU14TnVwMFVxTHRiUjVqaXQ5VjMtbm9icFV4TXFrZXNyMU8zQ0plYXNlVUxoYU1GdlRnRHZUTEJsMzhQSXRtV29kZWtSSVFIaENUSm1VbmQ3dw?oc=5",
-    "source": "한국대학신문",
-    "date": "Tue, 29 Sep 2026 02:22:41 GMT",
-    "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "양주시, 교육부 '교육혁신선도지역' 지정 최종 준비에 총력",
@@ -93,31 +93,7 @@
     "source": "newspim.com",
     "date": "Tue, 29 Sep 2026 02:46:00 GMT",
     "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
-  },
-  {
-    "title": "교육부, 지방교육행·재정통합시스템 ‘K-에듀파인’ 국제표준 인증 획득",
-    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE4yT1laeEplcHpoLWVOT2xoWGI5TXJ1azRRSXpBVmc0RXdrZjVCNFdtaUJsdFJSM1ZPNU50Z0p1QlZPMFJrUUJpc1FLUEVPQmsxMHVwSGdKLUlRcFB3NjF0aGlYbjB0VklHWWtWUmoyOWk?oc=5",
-    "source": "lecturernews.com",
-    "date": "Tue, 29 Sep 2026 02:07:00 GMT",
-    "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
-  },
-  {
-    "title": "교육부 ‘K-에듀파인’ 국제표준화기구 인증 획득",
-    "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5NZFN5TjlXM1M4bGw0YTZZWVlPLXNPMmZweTBtVDdqbWpMVkloUHlRemVmYmk4OXZYWmZUYXAwM0tUQnVCZlpHZVEwMWZISVd2cUNIdndTV1EtVWd2Y0NJ?oc=5",
-    "source": "한국교육신문",
-    "date": "Tue, 29 Sep 2026 00:21:12 GMT",
-    "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
-  },
-  {
-    "title": "경북대, 교육부 `글로컬랩` 2곳 동시 선정… 9년간 377억원 투입",
-    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5zZjhCSlc3RWFFYTZFUEJhOFhhOVI3bzR4cC1ZLUJNYjBVRDJlX2RjNms3UTkxbWhNTmtNcy01dkp1b1M3YTJlcS16YnFKREhMT2RwUTRjZm1kWTdCRW00VXpB?oc=5",
-    "source": "매일신문",
-    "date": "Tue, 29 Sep 2026 06:00:40 GMT",
-    "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "국립공주대 산학협력단, 교육부 ‘글로컬랩’ 최종 선정",
@@ -125,7 +101,31 @@
     "source": "데일리한국",
     "date": "Tue, 29 Sep 2026 05:34:28 GMT",
     "category": "교육부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  },
+  {
+    "title": "세종시교육청 새 부교육감에 ‘AI 정책통’ 이윤홍…교육부 25년 경력",
+    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE11eGptQ1NBdHQwaFZ2VEd5ZGt6SlVMWmc5SzBsbl9QWVNsOXh2MGFweFdCNXZxaEhDZUVVOW1tQTdvWElJalNQMGJGa1hpYWlWZVA4Q2FnblBKY2kzbjRIN2MxeDZyYlNC?oc=5",
+    "source": "녹색경제신문",
+    "date": "Sun, 27 Sep 2026 21:14:20 GMT",
+    "category": "교육부",
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  },
+  {
+    "title": "경북대, 교육부 `글로컬랩` 2곳 동시 선정… 9년간 377억원 투입",
+    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5zZjhCSlc3RWFFYTZFUEJhOFhhOVI3bzR4cC1ZLUJNYjBVRDJlX2RjNms3UTkxbWhNTmtNcy01dkp1b1M3YTJlcS16YnFKREhMT2RwUTRjZm1kWTdCRW00VXpB?oc=5",
+    "source": "imaeil.com",
+    "date": "Tue, 29 Sep 2026 06:00:40 GMT",
+    "category": "교육부",
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  },
+  {
+    "title": "교육부, 교육발전특구 시범사업 연차점검 포천시 최고 A등급 달성",
+    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBFOFlrMkk3b2V6bGhWeGlmcGZLcTVQRFJDcnp4X0ExN3lwRkdpY1Z2cTV2NWVMd3MwYTZUY1NsMzdzbkVmVWl3R3BBdXFXcWd6N21aUk8wRkVVWDhiREVQaGtUMldUc3g0RllsOWtR?oc=5",
+    "source": "gukjenews.com",
+    "date": "Mon, 28 Sep 2026 00:01:29 GMT",
+    "category": "교육부",
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "[포토] 발언하는 박홍근 기획예산처 장관",
@@ -133,7 +133,7 @@
     "source": "아시아경제",
     "date": "Tue, 29 Sep 2026 00:57:00 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "[포토] 당정서 발언하는 박홍근 기획예산처 장관",
@@ -141,7 +141,7 @@
     "source": "뉴데일리",
     "date": "Tue, 29 Sep 2026 03:00:33 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "[인사] 재정경제부 외",
@@ -149,7 +149,7 @@
     "source": "조선일보",
     "date": "Mon, 28 Sep 2026 15:43:00 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "[인사]기획예산처 外",
@@ -157,7 +157,7 @@
     "source": "동아일보",
     "date": "Mon, 28 Sep 2026 19:30:00 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "발언하는 박홍근 기획예산처 장관",
@@ -165,7 +165,7 @@
     "source": "노컷뉴스",
     "date": "Tue, 29 Sep 2026 00:21:23 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "공공기관 지정·평가권 재경부 장관 손 떠나…'힘빼기'는 반쪽",
@@ -173,7 +173,7 @@
     "source": "v.daum.net",
     "date": "Tue, 29 Sep 2026 02:07:00 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "발언하는 박홍근 기획예산처 장관",
@@ -181,7 +181,7 @@
     "source": "데일리안",
     "date": "Mon, 28 Sep 2026 23:53:00 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   },
   {
     "title": "기획예산처 기조실장에 정향우 사회예산심의관",
@@ -189,6 +189,6 @@
     "source": "연합뉴스",
     "date": "Mon, 28 Sep 2026 02:30:46 GMT",
     "category": "기재부",
-    "summary": "요약 생성 중 오류가 발생했습니다. (상태 코드: 404)"
+    "summary": "API 오류 (404): models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
   }
 ]
