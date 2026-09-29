@@ -24,12 +24,11 @@ def extract_article_text(url):
         res = requests.get(url, headers=headers, timeout=5, allow_redirects=True)
         if res.status_code == 200:
             soup = BeautifulSoup(res.text, "html.html" if "html.html" in res.text else "html.parser")
-            # 불필요한 태그 제거
             for tag in soup(["script", "style", "nav", "header", "footer", "aside"]):
                 tag.extract()
             paragraphs = soup.find_all("p")
             text = " ".join([p.get_text().strip() for p in paragraphs if len(p.get_text().strip()) > 30])
-            return text[:1500] # 상위 1,500자 추출
+            return text[:1500] 
     except Exception:
         pass
     return ""
@@ -39,7 +38,8 @@ def summarize_with_gemini(title, content):
     if not GEMINI_API_KEY:
         return "API 키가 설정되지 않아 요약을 생성할 수 없습니다."
 
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    # ★ 모델 이름을 구버전(1.5)에서 최신 버전(2.5)으로 변경했습니다.
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     
     context = content if len(content) > 100 else title
     prompt = (
@@ -79,7 +79,6 @@ def crawl_news():
         rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=ko&gl=KR&ceid=KR:ko"
         feed = feedparser.parse(rss_url)
         
-        # 카테고리당 최대 8건 수집
         entries = feed.entries[:8]
         
         for entry in entries:
@@ -87,7 +86,6 @@ def crawl_news():
             link = entry.link
             pub_date = entry.get("published", "")
             
-            # 출처 분리
             source = "출처 모름"
             clean_title = title
             if " - " in title:
@@ -95,7 +93,6 @@ def crawl_news():
                 clean_title = parts[0]
                 source = parts[1]
 
-            # 본문 추출 및 AI 요약
             body_text = extract_article_text(link)
             ai_summary = summarize_with_gemini(clean_title, body_text)
 
@@ -108,10 +105,9 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            # ★ 핵심 수정: 구글 무료 API 호출 제한(1분에 15건)을 피하기 위해 4.5초 대기
+            # API 호출 제한 방지 대기 시간
             time.sleep(4.5)
 
-    # news.json 파일 저장
     with open("news.json", "w", encoding="utf-8") as f:
         json.dump(all_news, f, ensure_ascii=False, indent=2)
 
