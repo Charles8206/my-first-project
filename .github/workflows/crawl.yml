@@ -2,7 +2,7 @@ name: daily-crawl
 
 on:
   schedule:
-    - cron: "0 22 * * *"   # 매일 한국시간 오전 07:00 실행
+    - cron: "0 22 * * *"   # 매일 한국시간 오전 07:00 자동 실행
   workflow_dispatch: {}      # 수동 즉시 실행 지원
 
 permissions:
@@ -28,7 +28,7 @@ jobs:
         run: |
           python crawler.py
 
-- name: Commit and Push
+      - name: Commit and Push
         run: |
           git config user.name "news-bot"
           git config user.email "bot@users.noreply.github.com"
