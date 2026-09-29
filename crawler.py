@@ -67,7 +67,7 @@ def summarize_with_gemini(title, content):
             summary = res_json["candidates"][0]["content"]["parts"][0]["text"].strip()
             return summary
         else:
-            return "본문 요약 생성 중 일시적인 오류가 발생했습니다."
+            return f"요약 생성 중 오류가 발생했습니다. (상태 코드: {response.status_code})"
     except Exception as e:
         return "요약 처리 시간 초과 또는 네트워크 오류가 발생했습니다."
 
@@ -79,7 +79,7 @@ def crawl_news():
         rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=ko&gl=KR&ceid=KR:ko"
         feed = feedparser.parse(rss_url)
         
-        # 카테고리당 최대 8건 수집 (API 호출 속도 및 할당량 고려)
+        # 카테고리당 최대 8건 수집
         entries = feed.entries[:8]
         
         for entry in entries:
@@ -108,8 +108,8 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            # Gemini 무료 API 호출 간격 유지 (안정적인 실행)
-            time.sleep(1.2)
+            # ★ 핵심 수정: 구글 무료 API 호출 제한(1분에 15건)을 피하기 위해 4.5초 대기
+            time.sleep(4.5)
 
     # news.json 파일 저장
     with open("news.json", "w", encoding="utf-8") as f:
