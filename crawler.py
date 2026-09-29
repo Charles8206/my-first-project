@@ -7,7 +7,6 @@ import feedparser
 from bs4 import BeautifulSoup
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
-BEST_MODEL = None  # 자동 감지된 모델을 저장할 변수
 
 CATEGORIES = {
     "대학": "대학 OR 대학교",
@@ -16,7 +15,7 @@ CATEGORIES = {
 }
 
 def extract_article_text(url):
-    """기사 원문 링크에서 본문 텍스트 추출"""
+    """기사 원문 링크에서 본문 텍스트 일부 추출"""
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -33,46 +32,21 @@ def extract_article_text(url):
         pass
     return ""
 
-def get_best_model(api_key):
-    """현재 API 키로 권한이 있는 가장 최신의 지원 모델을 자동으로 찾아냅니다."""
-    try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
-        res = requests.get(url, timeout=10)
-        if res.status_code == 200:
-            models = res.json().get("models", [])
-            # generateContent(텍스트 생성)를 지원하는 모델들만 추려냄
-            valid_models = [m["name"] for m in models if "generateContent" in m.get("supportedGenerationMethods", [])]
-            
-            # 구글의 최신 모델 순서대로 우선순위 확인 (2026년 기준 3.5, 3.0 등)
-            for pref in ["models/gemini-3.5-flash", "models/gemini-3.1-flash", "models/gemini-3.0-flash", "models/gemini-2.5-flash", "models/gemini-2.0-flash", "models/gemini-1.5-flash-latest"]:
-                if pref in valid_models:
-                    return pref
-            # 우선순위 목록에 없으면 그냥 구글이 허락한 첫 번째 모델을 강제로 사용
-            if valid_models:
-                return valid_models[0]
-    except Exception:
-        pass
-    return "models/gemini-3.5-flash" # 만약 자동 감지에 실패할 경우 사용할 2026년 최신 기본값
-
 def summarize_with_gemini(title, content):
-    """자동으로 찾은 API 모델을 호출하여 핵심 요약 생성"""
-    global BEST_MODEL
+    """Gemini 1.5 Flash-8B(가장 가볍고 빠른 무료 모델) 직접 호출"""
     if not GEMINI_API_KEY:
-        return "API 키가 설정되지 않았거나 인식되지 않았습니다."
+        return "API 키가 인식되지 않았습니다."
 
-    # 최초 1회만 모델을 감지하고 저장해둠 (속도 향상)
-    if not BEST_MODEL:
-        BEST_MODEL = get_best_model(GEMINI_API_KEY)
-        
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/{BEST_MODEL}:generateContent?key={GEMINI_API_KEY}"
+    # 구글 공식 권장 빠르고 가벼운 모델 강제 지정
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key={GEMINI_API_KEY}"
     
     context = content if len(content) > 100 else title
     prompt = (
         f"기사 제목: {title}\n"
         f"기사 내용: {context}\n\n"
         "지시사항:\n"
-        "1. 기사의 가장 핵심적인 사실과 쟁점을 2~3줄의 간결한 한국어로 요약하세요.\n"
-        "2. '이 기사는~', '요약하자면' 같은 불필요한 서두 없이 번호나 글머리 기호 없이 바로 작성하세요."
+        "1. 기사의 핵심 사실을 2~3줄의 간결한 한국어로 요약하세요.\n"
+        "2. 서두나 맺음말, 기호 없이 내용만 바로 작성하세요."
     )
 
     payload = {
@@ -81,7 +55,8 @@ def summarize_with_gemini(title, content):
     }
 
     try:
-        response = requests.post(api_url, json=payload, timeout=10)
+        # 응답 대기 시간을 20초로 넉넉하게 연장
+        response = requests.post(api_url, json=payload, timeout=20)
         if response.status_code == 200:
             res_json = response.json()
             return res_json["candidates"][0]["content"]["parts"][0]["text"].strip()
@@ -90,9 +65,9 @@ def summarize_with_gemini(title, content):
                 err_msg = response.json().get("error", {}).get("message", "알 수 없는 오류")
             except:
                 err_msg = response.text
-            return f"API 오류 ({response.status_code}) - 감지된 모델({BEST_MODEL}): {err_msg}"
+            return f"API 오류 ({response.status_code}): {err_msg}"
     except Exception as e:
-        return "요약 처리 시간 초과 또는 네트워크 오류가 발생했습니다."
+        return f"요약 처리 중 오류 발생: {str(e)}"
 
 def crawl_news():
     all_news = []
@@ -128,7 +103,7 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            # API 호출 제한 방지 4.5초 대기 
+            # API 제한 방지 대기
             time.sleep(4.5)
 
     with open("news.json", "w", encoding="utf-8") as f:
