@@ -6,9 +6,9 @@ import requests
 import feedparser
 from bs4 import BeautifulSoup
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+# API 키 앞뒤의 보이지 않는 공백 및 줄바꿈을 강제로 제거합니다.
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 
-# 부처 및 대학별 검색 키워드 (분야당 최신 8건 수집)
 CATEGORIES = {
     "대학": "대학 OR 대학교",
     "교육부": "교육부",
@@ -36,10 +36,10 @@ def extract_article_text(url):
 def summarize_with_gemini(title, content):
     """Gemini API를 호출하여 기사 핵심 2~3줄 요약 생성"""
     if not GEMINI_API_KEY:
-        return "API 키가 설정되지 않아 요약을 생성할 수 없습니다."
+        return "API 키가 설정되지 않았거나 인식되지 않았습니다. GitHub Secrets를 확인해주세요."
 
-    # ★ 모델 이름을 구버전(1.5)에서 최신 버전(2.5)으로 변경했습니다.
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    # 가장 안정적인 최신 모델로 원복
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
     context = content if len(content) > 100 else title
     prompt = (
@@ -67,7 +67,12 @@ def summarize_with_gemini(title, content):
             summary = res_json["candidates"][0]["content"]["parts"][0]["text"].strip()
             return summary
         else:
-            return f"요약 생성 중 오류가 발생했습니다. (상태 코드: {response.status_code})"
+            # 실패 시 구글 서버가 뱉어내는 '진짜 에러 원인'을 화면에 출력
+            try:
+                err_msg = response.json().get("error", {}).get("message", "알 수 없는 오류")
+            except:
+                err_msg = response.text
+            return f"API 오류 ({response.status_code}): {err_msg}"
     except Exception as e:
         return "요약 처리 시간 초과 또는 네트워크 오류가 발생했습니다."
 
@@ -105,7 +110,7 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            # API 호출 제한 방지 대기 시간
+            # API 호출 제한 방지 대기 시간 유지
             time.sleep(4.5)
 
     with open("news.json", "w", encoding="utf-8") as f:
