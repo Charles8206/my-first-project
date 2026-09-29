@@ -1,34 +1,151 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>교육·재정 뉴스 대시보드</title><style>
-body{margin:0;font-family:'Pretendard','Malgun Gothic',sans-serif;background:#f4f6fa;color:#1d2433}
-header{background:#1e3a8a;color:#fff;padding:20px 28px}h1{margin:0;font-size:22px}header p{margin:4px 0 0;opacity:.8;font-size:13px}
-.kpis{display:flex;gap:14px;padding:18px 28px;flex-wrap:wrap}.kpi{background:#fff;border-radius:10px;padding:14px 18px;flex:1;min-width:150px;box-shadow:0 1px 3px #0001;cursor:pointer;border-top:4px solid var(--c)}
-.kpi b{font-size:26px;display:block}.kpi span{font-size:13px;color:#667}.kpi.on{outline:2px solid var(--c)}
-.bar{padding:0 28px}input{width:100%;padding:10px;border:1px solid #ccd;border-radius:8px;font-size:14px;box-sizing:border-box}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;padding:18px 28px}
-.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px #0001;border-left:4px solid var(--c)}
-.tag{font-size:11px;color:#fff;background:var(--c);padding:2px 8px;border-radius:10px}.card h3{font-size:15px;margin:10px 0 6px}
-.card p{font-size:13px;color:#556;margin:0 0 8px;line-height:1.5}.card a{font-size:12px;color:#1e40af}
-</style></head><body>
-<header><h1>📊 대학 · 교육부 · 기재부(재경부/기획예산처) 뉴스 대시보드</h1><p id="upd"></p></header>
-<div class="kpis" id="kpis"></div><div class="bar"><input id="q" placeholder="키워드 검색 (예: 국무회의, 특수교육)"></div>
-<div class="grid" id="grid"></div>
-<script>
-const COL={"대학교":"#059669","교육부":"#2563eb","기재부(재정경제부·기획예산처)":"#d97706"};
-let DATA={updated:"2026-09-29 (초기 수집본)",items:[
-{cat:"교육부",title:"최교진 교육부 장관, 특수교육 교원단체와 '제8차 교육진담 간담회'",desc:"정부서울청사에서 장애학생 지원·특수교사 현장 애로 청취",src:"뉴스핌",link:"https://www.newspim.com/news/view/20260929000180"},
-{cat:"교육부",title:"2026 교육부 업무계획: AI 교육 확대·학석박 패스트트랙",desc:"AI 교과 시수 초등 2배·중학교 1.5배, AI 중점학교 확대",src:"교육부",link:"https://www.moe.go.kr/boardCnts/viewRenew.do?m=0202&s=moe&page=12&boardID=340&boardSeq=104910&lev=0&opType=N"},
-{cat:"대학교",title:"3차 글로컬대학 본지정 발표 29~30일 유력",desc:"위원회 정족수 미달로 발표가 늦어졌다는 보도",src:"유스라인",link:"http://www.usline.kr/news/articleView.html?idxno=31425"},
-{cat:"대학교",title:"교육부 업무계획 '학교·대학이 지역균형성장 뒷받침'",desc:"AID 중점 전문대, 대학원 융합연구 지원",src:"정책브리핑",link:"https://www.korea.kr/news/policyNewsView.do?newsId=156734914"},
-{cat:"기재부(재정경제부·기획예산처)",title:"재경부: 소득세법 시행령 등 4개 시행령 국무회의 의결",desc:"9/29 국무회의, 2분기 해외직접투자 동향·실질 지역내총생산 발표",src:"연합인포맥스",link:"https://news.einfomax.co.kr/news/articleView.html?idxno=4436522"},
-{cat:"기재부(재정경제부·기획예산처)",title:"기획예산처: 농·어업용 면세유 유가연동보조금 792억 추가 지원",desc:"고유가 지속으로 연말까지. 제14회 한-OECD 국제재정포럼 개최(파리)",src:"연합인포맥스",link:"https://news.einfomax.co.kr/news/articleView.html?idxno=4436522"},
-{cat:"기재부(재정경제부·기획예산처)",title:"기획재정부 → 재정경제부·기획예산처로 개편 (2026)",desc:"두 부처의 역할·기능 소개",src:"정책브리핑",link:"https://www.korea.kr/news/policyNewsView.do?newsId=148957232"}]};
-let sel=null;
-function render(){const q=document.getElementById('q').value.trim();
- document.getElementById('upd').textContent="업데이트: "+DATA.updated+" · 총 "+DATA.items.length+"건";
- document.getElementById('kpis').innerHTML=Object.keys(COL).map(c=>`<div class="kpi ${sel==c?'on':''}" style="--c:${COL[c]}" onclick="sel=sel=='${c}'?null:'${c}';render()"><b>${DATA.items.filter(i=>i.cat==c).length}</b><span>${c}</span></div>`).join('');
- document.getElementById('grid').innerHTML=DATA.items.filter(i=>(!sel||i.cat==sel)&&(!q||(i.title+(i.desc||'')).includes(q)))
- .map(i=>`<div class="card" style="--c:${COL[i.cat]||'#666'}"><span class="tag">${i.cat}</span><h3>${i.title}</h3><p>${i.desc||i.date||''}</p><a href="${i.link}" target="_blank">${i.src||'원문'} ↗</a></div>`).join('');}
-document.getElementById('q').oninput=render;
-fetch('news.json').then(r=>r.json()).then(d=>{DATA=d;render()}).catch(()=>{});render();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대학·교육부·기재부 뉴스 대시보드</title>
+    <style>
+        :root {
+            --univ-color: #2e7d32; /* 대학교 초록색 */
+            --edu-color: #1565c0;  /* 교육부 파란색 */
+            --fin-color: #ef6c00;  /* 기재부 주황색 */
+        }
+        body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background-color: #f4f7f6; margin: 0; padding: 30px; color: #333; }
+        
+        /* 상단 헤더 */
+        .header { background-color: #1e3a8a; color: white; padding: 25px 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header h1 { margin: 0 0 10px 0; font-size: 1.6rem; }
+        .header p { margin: 0; font-size: 0.95rem; color: #e5e7eb; }
+
+        /* 검색창 */
+        .search-box { width: 100%; padding: 18px 25px; font-size: 1.05rem; border: 1px solid #d1d5db; border-radius: 10px; margin-bottom: 30px; box-sizing: border-box; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .search-box:focus { outline: none; border-color: #1e3a8a; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2); }
+
+        /* 3단 박스 레이아웃 */
+        .dashboard-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; align-items: start; }
+        @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } } /* 모바일에서는 세로로 배열 */
+        
+        .category-box { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .category-title { font-size: 1.3rem; font-weight: 800; padding-bottom: 15px; margin-top: 0; margin-bottom: 20px; border-bottom: 3px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+
+        .univ-title { border-bottom-color: var(--univ-color); color: var(--univ-color); }
+        .edu-title { border-bottom-color: var(--edu-color); color: var(--edu-color); }
+        .fin-title { border-bottom-color: var(--fin-color); color: var(--fin-color); }
+
+        .count-badge { background-color: #f3f4f6; color: #4b5563; font-size: 0.9rem; padding: 5px 12px; border-radius: 20px; }
+
+        /* 뉴스 리스트 스타일 */
+        .news-list { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; max-height: 700px; padding-right: 10px; }
+        .news-list::-webkit-scrollbar { width: 8px; }
+        .news-list::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+
+        .news-item { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+        .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+        
+        .news-link { text-decoration: none; color: #1f2937; font-weight: 600; font-size: 1.05rem; line-height: 1.5; transition: color 0.2s; word-break: keep-all; }
+        .news-link:hover { color: #2563eb; text-decoration: underline; }
+        
+        .news-meta { font-size: 0.85rem; color: #6b7280; display: flex; justify-content: space-between; align-items: center; }
+        .news-source { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📊 대학 · 교육부 · 기재부 뉴스 대시보드</h1>
+        <p id="update-time">데이터를 불러오는 중입니다...</p>
+    </div>
+
+    <input type="text" id="search-input" class="search-box" placeholder="키워드를 검색해 보세요 (예: 글로컬, 국무회의)">
+
+    <div class="dashboard-container">
+        <!-- 대학교 박스 -->
+        <div class="category-box">
+            <h2 class="category-title univ-title">대학교 <span class="count-badge" id="count-univ">0건</span></h2>
+            <div class="news-list" id="list-univ"></div>
+        </div>
+
+        <!-- 교육부 박스 -->
+        <div class="category-box">
+            <h2 class="category-title edu-title">교육부 <span class="count-badge" id="count-edu">0건</span></h2>
+            <div class="news-list" id="list-edu"></div>
+        </div>
+
+        <!-- 기재부 박스 -->
+        <div class="category-box">
+            <h2 class="category-title fin-title">기재부 <span style="font-size: 0.9rem; font-weight: normal; margin-left: 5px;">(재경부/기획예산처)</span> <span class="count-badge" id="count-fin">0건</span></h2>
+            <div class="news-list" id="list-fin"></div>
+        </div>
+    </div>
+
+    <script>
+        let allNews = [];
+
+        // JSON 데이터 불러오기
+        fetch('news.json')
+            .then(response => response.json())
+            .then(data => {
+                allNews = data;
+                document.getElementById('update-time').innerText = `업데이트 완료 | 총 ${allNews.length}건 수집됨`;
+                renderNews(allNews);
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('update-time').innerText = '뉴스 데이터를 불러오는데 실패했습니다.';
+            });
+
+        // 실시간 검색 기능
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = allNews.filter(news => news.title.toLowerCase().includes(keyword));
+            renderNews(filtered);
+        });
+
+        // 화면 렌더링 함수
+        function renderNews(newsArray) {
+            const lists = {
+                univ: document.getElementById('list-univ'),
+                edu: document.getElementById('list-edu'),
+                fin: document.getElementById('list-fin')
+            };
+            const counts = { univ: 0, edu: 0, fin: 0 };
+
+            // 기존 리스트 초기화
+            lists.univ.innerHTML = ''; lists.edu.innerHTML = ''; lists.fin.innerHTML = '';
+
+            newsArray.forEach(news => {
+                // 작성일 데이터 가공
+                const dateText = news.date || news.published || '';
+                const sourceText = news.source || '출처 모름';
+
+                const itemHtml = `
+                    <div class="news-item">
+                        <a href="${news.link}" target="_blank" class="news-link">${news.title}</a>
+                        <div class="news-meta">
+                            <span>${dateText.substring(0, 16)}...</span>
+                            <span class="news-source">${sourceText}</span>
+                        </div>
+                    </div>
+                `;
+
+                // 카테고리별 분류
+                if (news.category === '대학' || (news.category && news.category.includes('대학') || news.category.includes('대학교'))) {
+                    lists.univ.innerHTML += itemHtml;
+                    counts.univ++;
+                } else if (news.category === '교육부' || (news.category && news.category.includes('교육'))) {
+                    lists.edu.innerHTML += itemHtml;
+                    counts.edu++;
+                } else {
+                    lists.fin.innerHTML += itemHtml;
+                    counts.fin++;
+                }
+            });
+
+            // 건수 숫자 갱신
+            document.getElementById('count-univ').innerText = counts.univ + '건';
+            document.getElementById('count-edu').innerText = counts.edu + '건';
+            document.getElementById('count-fin').innerText = counts.fin + '건';
+        }
+    </script>
+</body>
+</html>
