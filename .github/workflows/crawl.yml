@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install feedparser beautifulsoup4 requests
+          pip install feedparser beautifulsoup4 requests google-generativeai
 
       - name: Run Crawler
         env:
