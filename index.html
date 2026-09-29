@@ -42,11 +42,19 @@
         .news-item { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
         .news-item:last-child { border-bottom: none; padding-bottom: 0; }
         
-        .news-link { text-decoration: none; color: #1f2937; font-weight: 600; font-size: 1.05rem; line-height: 1.5; transition: color 0.2s; word-break: keep-all; }
-        .news-link:hover { color: #2563eb; text-decoration: underline; }
-        
         .news-meta { font-size: 0.85rem; color: #6b7280; display: flex; justify-content: space-between; align-items: center; }
         .news-source { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        /* 요약 토글 및 버튼 스타일 (새로 추가된 부분) */
+        .news-title-btn { background: none; border: none; padding: 0; margin: 0; text-align: left; font-size: 1.05rem; font-weight: 600; color: #1f2937; cursor: pointer; line-height: 1.5; word-break: keep-all; font-family: inherit; transition: color 0.2s; width: 100%; }
+        .news-title-btn:hover { color: #2563eb; }
+        
+        .news-summary-box { display: none; background-color: #f8fafc; padding: 15px; margin-top: 12px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid #2e7d32; font-size: 0.95rem; line-height: 1.6; color: #475569; }
+        .news-summary-box.active { display: block; } /* 클릭 시 요약 상자가 보이게 하는 역할 */
+        
+        .summary-text { margin-bottom: 12px; }
+        .read-more-btn { display: inline-block; background-color: #1e3a8a; color: white; padding: 7px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; transition: background-color 0.2s; }
+        .read-more-btn:hover { background-color: #1e40af; }
     </style>
 </head>
 <body>
@@ -78,7 +86,7 @@
         </div>
     </div>
 
-<script>
+    <script>
         let allNews = [];
 
         // 최신 데이터 강제 불러오기 (캐시 무시)
@@ -158,17 +166,27 @@
                 let dateText = news.date || news.published || news.pubDate || '';
                 dateText = dateText.replace(' GMT', '').replace('T', ' ').substring(0, 16);
 
+                // 4. 뉴스 요약 텍스트 추출 (새로 추가된 부분)
+                let summaryText = news.summary || news.description || '이 기사는 본문 요약을 제공하지 않습니다.';
+
+                // 5. HTML 구조 생성 (클릭 가능한 제목 버튼과 숨겨진 요약 박스)
                 const itemHtml = `
                     <div class="news-item">
-                        <a href="${news.link || '#'}" target="_blank" class="news-link">${title}</a>
-                        <div class="news-meta">
+                        <button class="news-title-btn" onclick="this.nextElementSibling.classList.toggle('active')">
+                            ${title}
+                        </button>
+                        <div class="news-summary-box">
+                            <div class="summary-text">${summaryText}</div>
+                            <a href="${news.link || '#'}" target="_blank" class="read-more-btn">기사 원문 보기 🔗</a>
+                        </div>
+                        <div class="news-meta" style="margin-top: 10px;">
                             <span>${dateText}</span>
                             <span class="news-source">${sourceText}</span>
                         </div>
                     </div>
                 `;
 
-                // 4. 화면 및 카운트 반영
+                // 6. 화면 및 카운트 반영
                 if (categoryType === 'univ') {
                     lists.univ.innerHTML += itemHtml;
                     counts.univ++;
@@ -187,3 +205,5 @@
             document.getElementById('count-fin').innerText = counts.fin + '건';
         }
     </script>
+</body>
+</html>
