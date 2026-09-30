@@ -4,12 +4,12 @@ import requests
 import feedparser
 import time
 
-# 동국대학교를 최우선 순위로 배치
+# 요청하신 4개의 카테고리로 명칭 및 순서 변경
 CATEGORIES = {
-    "동국대": "동국대학교",
-    "대학": "대학 OR 대학교",
-    "교육부": "교육부",
-    "기재부": "기획재정부 OR 재정경제부 OR 기획예산처"
+    "동국대학교 NEWS": "동국대학교 OR 동국대",
+    "대학교 NEWS": "대학 OR 대학교",
+    "교육부 NEWS": "교육부",
+    "기재부 NEWS": "기획재정부 OR 재정경제부 OR 기획예산처"
 }
 
 def crawl_news():
@@ -20,7 +20,7 @@ def crawl_news():
         rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=ko&gl=KR&ceid=KR:ko"
         feed = feedparser.parse(rss_url)
         
-        # AI 요약이 없으므로 속도 제한 없이 8건 꽉 채워서 수집
+        # AI 요약이 없으므로 속도 제한 없이 8건 수집
         entries = feed.entries[:8]
         
         for entry in entries:
