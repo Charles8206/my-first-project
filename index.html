@@ -3,207 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대학·교육부·기재부 뉴스 대시보드</title>
+    <title>동국대학교 WISE캠퍼스 정책·뉴스 대시보드</title>
     <style>
         :root {
-            --univ-color: #2e7d32; /* 대학교 초록색 */
-            --edu-color: #1565c0;  /* 교육부 파란색 */
-            --fin-color: #ef6c00;  /* 기재부 주황색 */
+            /* 동국대학교 로고 상징색 */
+            --dongguk-orange: #F26522;
+            --dongguk-navy: #002B5E;
+            --bg-color: #f4f6f8;
+            --text-main: #222;
+            --text-muted: #666;
         }
-        body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background-color: #f4f7f6; margin: 0; padding: 30px; color: #333; }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+        }
+
+        header {
+            background-color: var(--dongguk-navy);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-bottom: 5px solid var(--dongguk-orange);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .search-container {
+            max-width: 1600px;
+            margin: 20px auto 0;
+            padding: 0 40px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: var(--dongguk-orange);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            padding: 30px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .category-column {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border-top: 4px solid var(--dongguk-navy);
+            height: fit-content;
+        }
+
+        /* 동국대학교 열 특별 강조 */
+        .category-column[data-category="동국대학교 NEWS"] {
+            border-top: 4px solid var(--dongguk-orange);
+            background: #fffcfb; 
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .category-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--dongguk-navy);
+            font-weight: 700;
+        }
         
-        /* 상단 헤더 */
-        .header { background-color: #1e3a8a; color: white; padding: 25px 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0 0 10px 0; font-size: 1.6rem; }
-        .header p { margin: 0; font-size: 0.95rem; color: #e5e7eb; }
+        .category-column[data-category="동국대학교 NEWS"] .category-header h2 {
+            color: var(--dongguk-orange);
+        }
 
-        /* 검색창 */
-        .search-box { width: 100%; padding: 18px 25px; font-size: 1.05rem; border: 1px solid #d1d5db; border-radius: 10px; margin-bottom: 30px; box-sizing: border-box; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .search-box:focus { outline: none; border-color: #1e3a8a; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2); }
+        .article-count {
+            background: #eee;
+            color: #555;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-        /* 3단 박스 레이아웃 */
-        .dashboard-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; align-items: start; }
-        @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } } /* 모바일에서는 세로로 배열 */
+        .news-card {
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: transform 0.2s;
+        }
+
+        .news-card:last-child {
+            border-bottom: none;
+        }
         
-        .category-box { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .category-title { font-size: 1.3rem; font-weight: 800; padding-bottom: 15px; margin-top: 0; margin-bottom: 20px; border-bottom: 3px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .news-card:hover {
+            transform: translateX(5px);
+        }
 
-        .univ-title { border-bottom-color: var(--univ-color); color: var(--univ-color); }
-        .edu-title { border-bottom-color: var(--edu-color); color: var(--edu-color); }
-        .fin-title { border-bottom-color: var(--fin-color); color: var(--fin-color); }
+        /* 기사 제목 링크화 */
+        .article-link {
+            text-decoration: none;
+            color: var(--text-main);
+            display: block;
+        }
 
-        .count-badge { background-color: #f3f4f6; color: #4b5563; font-size: 0.9rem; padding: 5px 12px; border-radius: 20px; }
+        .article-title {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            line-height: 1.4;
+            font-weight: 600;
+            transition: color 0.2s;
+            word-break: keep-all;
+        }
 
-        /* 뉴스 리스트 스타일 */
-        .news-list { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; max-height: 700px; padding-right: 10px; }
-        .news-list::-webkit-scrollbar { width: 8px; }
-        .news-list::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+        .article-link:hover .article-title {
+            color: var(--dongguk-orange);
+            text-decoration: underline;
+        }
 
-        .news-item { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
-        .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
         
-        .news-meta { font-size: 0.85rem; color: #6b7280; display: flex; justify-content: space-between; align-items: center; }
-        .news-source { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+        .meta-info span {
+            background-color: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
 
-        /* 요약 토글 및 버튼 스타일 (새로 추가된 부분) */
-        .news-title-btn { background: none; border: none; padding: 0; margin: 0; text-align: left; font-size: 1.05rem; font-weight: 600; color: #1f2937; cursor: pointer; line-height: 1.5; word-break: keep-all; font-family: inherit; transition: color 0.2s; width: 100%; }
-        .news-title-btn:hover { color: #2563eb; }
-        
-        .news-summary-box { display: none; background-color: #f8fafc; padding: 15px; margin-top: 12px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid #2e7d32; font-size: 0.95rem; line-height: 1.6; color: #475569; }
-        .news-summary-box.active { display: block; } /* 클릭 시 요약 상자가 보이게 하는 역할 */
-        
-        .summary-text { margin-bottom: 12px; }
-        .read-more-btn { display: inline-block; background-color: #1e3a8a; color: white; padding: 7px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; transition: background-color 0.2s; }
-        .read-more-btn:hover { background-color: #1e40af; }
+        @media (max-width: 1200px) {
+            .dashboard { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard { grid-template-columns: 1fr; padding: 20px; }
+            .search-container { padding: 0 20px; }
+            header { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>📊 대학 · 교육부 · 기재부 뉴스 대시보드</h1>
+    <header>
+        <h1>동국대학교 WISE캠퍼스 정책·뉴스 대시보드</h1>
         <p id="update-time">데이터를 불러오는 중입니다...</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="관심 있는 키워드를 검색해 보세요 (예: 글로컬, 예산)">
     </div>
 
-    <input type="text" id="search-input" class="search-box" placeholder="키워드를 검색해 보세요 (예: 글로컬, 국무회의)">
-
-    <div class="dashboard-container">
-        <!-- 대학교 박스 -->
-        <div class="category-box">
-            <h2 class="category-title univ-title">대학교 <span class="count-badge" id="count-univ">0건</span></h2>
-            <div class="news-list" id="list-univ"></div>
-        </div>
-
-        <!-- 교육부 박스 -->
-        <div class="category-box">
-            <h2 class="category-title edu-title">교육부 <span class="count-badge" id="count-edu">0건</span></h2>
-            <div class="news-list" id="list-edu"></div>
-        </div>
-
-        <!-- 기재부 박스 -->
-        <div class="category-box">
-            <h2 class="category-title fin-title">기재부 <span style="font-size: 0.9rem; font-weight: normal; margin-left: 5px;">(재경부/기획예산처)</span> <span class="count-badge" id="count-fin">0건</span></h2>
-            <div class="news-list" id="list-fin"></div>
-        </div>
+    <div class="dashboard" id="dashboard">
+        <!-- 자바스크립트로 카테고리 열이 생성됩니다. -->
     </div>
 
     <script>
-        let allNews = [];
+        // 4개 카테고리 순서 배열 (화면 좌측부터 표시)
+        const categoryOrder = ["동국대학교 NEWS", "대학교 NEWS", "교육부 NEWS", "기재부 NEWS"];
+        let allNewsData = [];
 
-        // 최신 데이터 강제 불러오기 (캐시 무시)
-        const timestamp = new Date().getTime();
-        fetch('./news.json?t=' + timestamp)
-            .then(response => {
-                if (!response.ok) throw new Error('데이터 파일을 찾을 수 없습니다.');
-                return response.json();
-            })
-            .then(data => {
-                allNews = Array.isArray(data) ? data : (data.news || data.items || []);
-                document.getElementById('update-time').innerText = `새로고침 완료 | 총 ${allNews.length}건 수집됨`;
-                renderNews(allNews);
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('update-time').innerText = '데이터를 불러오는데 실패했습니다.';
-            });
-
-        // 실시간 검색 기능
-        document.getElementById('search-input').addEventListener('input', function(e) {
-            const keyword = e.target.value.toLowerCase();
-            const filtered = allNews.filter(news => (news.title || '').toLowerCase().includes(keyword));
-            renderNews(filtered);
-        });
-
-        // 화면 렌더링 함수
-        function renderNews(newsArray) {
-            const lists = {
-                univ: document.getElementById('list-univ'),
-                edu: document.getElementById('list-edu'),
-                fin: document.getElementById('list-fin')
-            };
-            let counts = { univ: 0, edu: 0, fin: 0 };
-
-            // 초기화
-            lists.univ.innerHTML = ''; lists.edu.innerHTML = ''; lists.fin.innerHTML = '';
-
-            if (!newsArray || newsArray.length === 0) return;
-
-            newsArray.forEach(news => {
-                // 1. 타이틀과 출처 자동 분리 (제목 끝에 ' - 언론사' 형태로 붙어있는 경우 처리)
-                let rawTitle = news.title || '제목 없음';
-                let title = rawTitle;
-                let sourceText = news.source || news.publisher || '';
+        async function loadNews() {
+            try {
+                const response = await fetch('news.json');
+                const data = await response.json();
+                allNewsData = data;
                 
-                if (!sourceText && rawTitle.includes(' - ')) {
-                    const parts = rawTitle.split(' - ');
-                    sourceText = parts.pop(); // 마지막 텍스트를 언론사로 추출
-                    title = parts.join(' - '); // 나머지를 진짜 제목으로
-                } else if (!sourceText) {
-                    sourceText = '출처 모름';
-                }
-
-                // 2. 카테고리 유연한 분류 (json 필드 확인 및 제목 기반 추론)
-                const jsonCategory = String(news.category || news.keyword || news.query || '').trim();
-                let categoryType = 'fin'; // 기본값 설정
+                document.getElementById('update-time').innerText = `마지막 업데이트: ${new Date().toLocaleString()} | 총 ${data.length}건 수집됨`;
                 
-                if (jsonCategory.includes('대학') || jsonCategory.includes('대학교')) {
-                    categoryType = 'univ';
-                } else if (jsonCategory.includes('교육')) {
-                    categoryType = 'edu';
-                } else if (jsonCategory.includes('기재부') || jsonCategory.includes('재경부') || jsonCategory.includes('기획')) {
-                    categoryType = 'fin';
-                } else {
-                    // 카테고리 정보가 없을 경우 제목 텍스트로 강제 분류
-                    if (rawTitle.includes('교육부') || rawTitle.includes('장관') || rawTitle.includes('교과')) {
-                        categoryType = 'edu';
-                    } else if (rawTitle.includes('대학') || rawTitle.includes('캠퍼스') || rawTitle.includes('교수')) {
-                        categoryType = 'univ';
-                    } else {
-                        categoryType = 'fin';
-                    }
-                }
+                renderDashboard(data);
+            } catch (error) {
+                document.getElementById('dashboard').innerHTML = '<p style="padding: 20px;">뉴스를 불러오는 데 실패했습니다.</p>';
+            }
+        }
 
-                // 3. 날짜 텍스트 깔끔하게 정리
-                let dateText = news.date || news.published || news.pubDate || '';
-                dateText = dateText.replace(' GMT', '').replace('T', ' ').substring(0, 16);
+        function renderDashboard(newsArray) {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
 
-                // 4. 뉴스 요약 텍스트 추출 (새로 추가된 부분)
-                let summaryText = news.summary || news.description || '이 기사는 본문 요약을 제공하지 않습니다.';
+            categoryOrder.forEach(category => {
+                const categoryNews = newsArray.filter(item => item.category === category);
+                
+                const colDiv = document.createElement('div');
+                colDiv.className = 'category-column';
+                colDiv.setAttribute('data-category', category);
 
-                // 5. HTML 구조 생성 (클릭 가능한 제목 버튼과 숨겨진 요약 박스)
-                const itemHtml = `
-                    <div class="news-item">
-                        <button class="news-title-btn" onclick="this.nextElementSibling.classList.toggle('active')">
-                            ${title}
-                        </button>
-                        <div class="news-summary-box">
-                            <div class="summary-text">${summaryText}</div>
-                            <a href="${news.link || '#'}" target="_blank" class="read-more-btn">기사 원문 보기 🔗</a>
-                        </div>
-                        <div class="news-meta" style="margin-top: 10px;">
-                            <span>${dateText}</span>
-                            <span class="news-source">${sourceText}</span>
-                        </div>
+                const headerHTML = `
+                    <div class="category-header">
+                        <h2>${category}</h2>
+                        <span class="article-count">${categoryNews.length}건</span>
                     </div>
                 `;
-
-                // 6. 화면 및 카운트 반영
-                if (categoryType === 'univ') {
-                    lists.univ.innerHTML += itemHtml;
-                    counts.univ++;
-                } else if (categoryType === 'edu') {
-                    lists.edu.innerHTML += itemHtml;
-                    counts.edu++;
+                
+                let cardsHTML = '';
+                if(categoryNews.length === 0) {
+                    cardsHTML = '<p style="color:#999; font-size:14px; text-align:center; padding: 20px 0;">수집된 뉴스가 없습니다.</p>';
                 } else {
-                    lists.fin.innerHTML += itemHtml;
-                    counts.fin++;
+                    categoryNews.forEach(item => {
+                        // 제목 클릭 시 바로 원문 링크로 이동, 요약 박스/버튼 제거
+                        cardsHTML += `
+                            <div class="news-card">
+                                <a href="${item.link}" target="_blank" class="article-link">
+                                    <h3 class="article-title">${item.title}</h3>
+                                </a>
+                                <div class="meta-info">
+                                    <span>${item.date}</span>
+                                    <span>${item.source}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
                 }
-            });
 
-            // 건수 업데이트
-            document.getElementById('count-univ').innerText = counts.univ + '건';
-            document.getElementById('count-edu').innerText = counts.edu + '건';
-            document.getElementById('count-fin').innerText = counts.fin + '건';
+                colDiv.innerHTML = headerHTML + cardsHTML;
+                dashboard.appendChild(colDiv);
+            });
         }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase();
+            const filteredData = allNewsData.filter(item => 
+                item.title.toLowerCase().includes(keyword)
+            );
+            renderDashboard(filteredData);
+        });
+
+        loadNews();
     </script>
 </body>
 </html>
