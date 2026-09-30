@@ -58,7 +58,13 @@ def summarize_with_gemini(title, content):
         response = AI_MODEL.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
-        return f"요약 에러 발생: {str(e)}"
+        error_msg = str(e)
+        # 429 에러 발생 시 대시보드가 깨지지 않도록 깔끔한 메시지 반환
+        if "429" in error_msg and "PerDay" in error_msg:
+            return "구글 AI 무료 일일 할당량(20건)이 모두 소진되어 요약을 제공할 수 없습니다. 내일 다시 확인해 주세요."
+        elif "429" in error_msg:
+            return "일시적인 API 호출 속도 제한으로 요약이 지연되었습니다."
+        return "AI 요약 생성 중 오류가 발생했습니다."
 
 def crawl_news():
     all_news = []
@@ -68,13 +74,13 @@ def crawl_news():
         rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=ko&gl=KR&ceid=KR:ko"
         feed = feedparser.parse(rss_url)
         
-        entries = feed.entries[:8]
+        # ★ 하루 20건 제한을 피하기 위해 카테고리당 6건씩(총 18건)만 수집하도록 수정
+        entries = feed.entries[:6]
         
         for entry in entries:
             title = entry.title
             link = entry.link
             
-            # ★ 구글의 지저분한 영문 날짜를 깔끔한 연-월-일 형식으로 변환
             if hasattr(entry, 'published_parsed') and entry.published_parsed:
                 pub_date = time.strftime("%Y-%m-%d", entry.published_parsed)
             else:
@@ -99,7 +105,6 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            # 1분에 5건 속도 제한 우회용 대기 시간
             time.sleep(15)
 
     with open("news.json", "w", encoding="utf-8") as f:
