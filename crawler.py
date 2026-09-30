@@ -41,7 +41,6 @@ def summarize_with_gemini(title, content):
     if AI_MODEL is None:
         try:
             genai.configure(api_key=GEMINI_API_KEY)
-            # 에러 메시지에서 구글이 명시적으로 요구한 최신 모델로 고정
             AI_MODEL = genai.GenerativeModel("gemini-3.8-flash")
         except Exception as e:
             return f"AI 초기화 실패: {str(e)}"
@@ -74,7 +73,12 @@ def crawl_news():
         for entry in entries:
             title = entry.title
             link = entry.link
-            pub_date = entry.get("published", "")
+            
+            # ★ 구글의 지저분한 영문 날짜를 깔끔한 연-월-일 형식으로 변환
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                pub_date = time.strftime("%Y-%m-%d", entry.published_parsed)
+            else:
+                pub_date = entry.get("published", "")
             
             source = "출처 모름"
             clean_title = title
@@ -95,7 +99,8 @@ def crawl_news():
                 "summary": ai_summary
             })
             
-            time.sleep(4.5)
+            # 1분에 5건 속도 제한 우회용 대기 시간
+            time.sleep(15)
 
     with open("news.json", "w", encoding="utf-8") as f:
         json.dump(all_news, f, ensure_ascii=False, indent=2)
