@@ -41,14 +41,8 @@ def summarize_with_gemini(title, content):
     if AI_MODEL is None:
         try:
             genai.configure(api_key=GEMINI_API_KEY)
-            available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-            if not available_models:
-                return "API 키로 사용할 수 있는 AI 모델이 없습니다."
-            
-            flash_models = [m for m in available_models if 'flash' in m.lower()]
-            target_model = flash_models[0] if flash_models else available_models[0]
-            
-            AI_MODEL = genai.GenerativeModel(target_model)
+            # 에러 메시지에서 구글이 명시적으로 요구한 최신 모델로 고정
+            AI_MODEL = genai.GenerativeModel("gemini-3.8-flash")
         except Exception as e:
             return f"AI 초기화 실패: {str(e)}"
 
